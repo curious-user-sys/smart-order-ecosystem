@@ -1,0 +1,39 @@
+server:
+  port: 8082
+spring:
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/smartorder_order?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: JavaKamp2026!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+product:
+  service:
+    url: http://product-service:8081
+    connect-timeout: 2s
+    read-timeout: 3s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+info:
+  app:
+    name: order-service
+    port: 8082
