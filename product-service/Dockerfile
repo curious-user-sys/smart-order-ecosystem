@@ -4,6 +4,8 @@ COPY pom.xml .
 COPY product-service/pom.xml product-service/pom.xml
 COPY order-service/pom.xml order-service/pom.xml
 COPY inventory-service/pom.xml inventory-service/pom.xml
+COPY discovery-server/pom.xml discovery-server/pom.xml
+COPY api-gateway/pom.xml api-gateway/pom.xml
 RUN mvn -B -pl product-service -am dependency:go-offline
 COPY product-service/src ./product-service/src
 RUN mvn -B -pl product-service -am clean package -DskipTests

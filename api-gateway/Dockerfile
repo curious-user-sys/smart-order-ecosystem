@@ -1,0 +1,17 @@
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY product-service/pom.xml product-service/pom.xml
+COPY order-service/pom.xml order-service/pom.xml
+COPY inventory-service/pom.xml inventory-service/pom.xml
+COPY discovery-server/pom.xml discovery-server/pom.xml
+COPY api-gateway/pom.xml api-gateway/pom.xml
+RUN mvn -B -pl api-gateway -am dependency:go-offline
+COPY api-gateway/src ./api-gateway/src
+RUN mvn -B -pl api-gateway -am clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /app/api-gateway/target/*-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
